@@ -14,6 +14,7 @@ class Store {
 
   @action.bound
   createNewItem(value: any) {
+    // create a temp todo with time stamp as id, and the input value as todo content
     let tempTodo = {
       id: new Date().getTime(),
       periodicity: '',
@@ -23,8 +24,6 @@ class Store {
       content: value
     };
     this.todos.push(tempTodo);
-    console.log(tempTodo);
-    console.log(this.todos);
   }
 
   @action.bound
