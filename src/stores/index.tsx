@@ -1,28 +1,36 @@
 import { observable, action } from 'mobx';
 
-interface item {
+interface TodoItem {
+  id: number;
   periodicity: any;
   priority: string;
   category: string;
   createTime: any;
-  todoItem: any;
+  content: any;
 }
 
 class Store {
-  @observable item: item[] = [];
+  @observable todos: TodoItem[] = [];
 
   @action.bound
-  createNewItem(inputContent: any) {
-    let temp = {
+  createNewItem(value: any) {
+    let tempTodo = {
+      id: new Date().getTime(),
       periodicity: '',
       priority: '',
       category: '',
       createTime: new Date().getTime(),
-      todoItem: inputContent
+      content: value
     };
-    this.item.push(temp);
-    console.log(temp);
-    console.log(this.item);
+    this.todos.push(tempTodo);
+    console.log(tempTodo);
+    console.log(this.todos);
+  }
+
+  @action.bound
+  deleteItem(id: number) {
+    let index = this.todos.findIndex(item => (item.id = id));
+    this.todos.splice(index - 1, 1);
   }
 }
 

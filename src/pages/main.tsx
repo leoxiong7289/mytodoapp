@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ConfigOption from '../components/configOption';
 import { configOptionData } from '../config/config';
 import { observer, inject } from 'mobx-react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { Button, LinearProgress } from '@material-ui/core';
 
@@ -47,7 +47,7 @@ const DisplayArea = styled.div`
   width: 300px;
   height: 340px;
   background-color: #aff;
-  padding-top: 20px;
+  padding-top: 5px;
   position: absolute;
   top: 330px;
   left: 120px;
@@ -62,37 +62,37 @@ export default class Main extends React.Component<RootProps> {
   }
   render() {
     const { store } = this.props;
+    console.log(store.todos[0]);
     return (
       <>
-        <h2>My Todos App</h2>
+        <h2>My Todo App</h2>
         <MainContainer className="main-container">
           <Formik
-            initialValues={{ itemInput: 'new task' }}
+            initialValues={{ todoItem: 'new task' }}
             validate={values => {
               const errors: any = {};
-              if (!values.itemInput) {
-                errors.inputItem = 'task can not be empty';
+              if (!values.todoItem) {
+                errors.todoItem = 'task can not be empty';
               }
-              console.log(errors);
               return errors;
             }}
             onSubmit={(values, action) => {
+              store.createNewItem(values.todoItem);
               setTimeout(() => {
                 action.setSubmitting(false);
-                store.createNewItem(values.itemInput);
               }, 500);
-              values.itemInput = '';
+              values.todoItem = '';
             }}
           >
             {(errors: any, isSubmitting: any) => (
               <Form>
                 <InputBar className="input-bar">
-                  <label htmlFor="itemInput">Add a task</label>
-                  <br />
-                  <Field component={TextField} name="itemInput" type="text" error={errors.inputItem} />
-                  {/* <ErrorMessage name="inputItem" component="div" /> */}
+                  <label htmlFor="todoItem">
+                    <h4>Add a task</h4>
+                  </label>
+                  <Field component={TextField} name="todoItem" type="text" error={errors.inputItem} />
                   {isSubmitting && <LinearProgress />}
-                  <Button variant="contained" color="primary" disabled={isSubmitting} type="submit">
+                  <Button variant="contained" color="primary" disabled={isSubmitting} type="submit" size="small">
                     Submit
                   </Button>
                 </InputBar>
@@ -107,7 +107,12 @@ export default class Main extends React.Component<RootProps> {
             )}
           </Formik>
           <DisplayArea className="display-area">
-            <p>this part is to display all the todo items</p>
+            <h2>Tasks to do</h2>
+            {store.todos.map((todo: any, index: number) => (
+              <p key={index} onClick={() => store.deleteItem(todo.id)}>
+                {todo.content}
+              </p>
+            ))}
           </DisplayArea>
         </MainContainer>
         <h3>@mytodoapp</h3>
