@@ -68,7 +68,7 @@ export default class Main extends React.Component<RootProps> {
         <h2>My Todo App</h2>
         <MainContainer className="main-container">
           <Formik
-            initialValues={{ todoItem: 'new task' }}
+            initialValues={{ todoItem: '' }}
             validate={values => {
               const errors: any = {};
               if (!values.todoItem) {
@@ -90,7 +90,13 @@ export default class Main extends React.Component<RootProps> {
                   <label htmlFor="todoItem">
                     <h4>Add a task</h4>
                   </label>
-                  <Field component={TextField} name="todoItem" type="text" error={errors.inputItem} />
+                  <Field
+                    component={TextField}
+                    name="todoItem"
+                    type="text"
+                    error={errors.inputItem}
+                    placeholder="Please Add Task"
+                  />
                   {isSubmitting && <LinearProgress />}
                   <Button variant="contained" color="primary" disabled={isSubmitting} type="submit" size="small">
                     Submit
